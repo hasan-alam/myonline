@@ -1,0 +1,58 @@
+# Maven build output
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+
+# Maven wrapper
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Spring Boot
+*.log
+spring.log
+
+# Application secrets / environment
+.env
+.env.*
+application-local.yml
+application-local.properties
+application-secret.yml
+application-secret.properties
+
+# IDE - IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# IDE - Eclipse
+.classpath
+.project
+.settings/
+bin/
+*.launch
+
+# IDE - VS Code
+.vscode/
+
+# IDE - NetBeans
+nbproject/
+nbbuild/
+nbdist/
+nb-configuration.xml
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+*~

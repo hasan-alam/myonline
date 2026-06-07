@@ -1,0 +1,64 @@
+Micro services High Level Overview
+==================================
+1> Authorization MS (Spring Boot Rest API based micro service)
+	   - Role Management (CRUD)-> Super Admin, Shop Admin etc seed data will be available and new roles can be created
+	   - Permission Management (CRUD)-> Seed Data in DB-> Can be assigned to roles
+	   - User Management (Create, activate, deactivate, delete)
+	   - User Login (JWT Token and Refresh Token Generation)
+	   - User Logout Management
+	   - Password Update
+	   - Token re-generation from refresh token
+	   
+2> Inventory MS (Seed data will be available, user can add more)
+     - Product Category and Sub Category Management (Add, Edit, Search, List, Activate, Deactivate, View)
+	  - Product variants (length, size, color etc) management
+	  - Item Management (Search, View, Add, Edit, Delete, Activate, Deactivate)
+	  - Product to Product Variants mapping
+	  - Inventory Management  
+      	  - Reports	  
+	  
+3> Order MS	  
+      - Order placing
+	  - Order cancel
+	  - Order return
+	  - Order processing (Order confirm, order shipping (multiple orders can be confirmed and shipped))
+	  - Order view
+	  - Shipper management
+	  - Shipper wise order and payment collection and dues(*)
+	  - Reports
+	  
+4> Notification MS
+	- Email
+	- SMS
+	
+5> API G/W MS (if needed)
+
+6> RabbitMQ for notification service and Monitoring & Observability using Loki stack or ELK stack
+	
+Web Applications
+==============
+1> Shop Admin Portal
+     -> Register
+	 -> Product and Inventory managment
+	 -> Reports
+	 -> Order Processing (Order confirmation, order shipping by lot, Order delivery status update)
+	 -> Payment Receivable (form shipper) managment 
+	 -> Return processing
+	 -> Subscription Payment
+	
+	 
+2> Application Admin Portal
+    -> Tenant Management (Tenant creation, activation/deactivation, deletion)
+    -> Tenants' Payment Report
+    -> Product Management (Category, Sub category, Item)
+	
+3> Shop Portal
+    -> Browse Product
+	-> Cart Management
+	-> Order
+	-> Cancel Order
+	-> Return Order
+	
+
+
+More details will be given later.

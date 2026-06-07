@@ -1,0 +1,12 @@
+Create spring boot REST application for the Authorization Micro service
+1. Create project as 'auth_service'
+2. Create Rest Controllers, DTOs, Entity classes, Service and Repository classes
+3. Write logs
+4. Add swagger documentations
+5. Add comments in code and configuration files
+6. Create Requests for testing the end points using postman 
+7. Write Dockerfile
+8. Write Docker Compose
+9. Write Document for testing 'Authorization_MS_Testing
+
+Important Note: we will use kubernetes with helm along with monitoring and observability (Promethus, Grafana, Loki, Alloy, Tempo etc) in near features.

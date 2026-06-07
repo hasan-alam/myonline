@@ -1,0 +1,10 @@
+This system will be a micro service architecture based system.
+The small to medium ecommerce business owners will use it. Multi tenant based ecommerce site.
+People who are involved in online business in facebook will use it.
+Each of the tenants will have individual URL for their ecommerce site.
+They will have inventory management along with their ecommerce portal.
+
+Mainly there will be 3 web portals
+1. System Admin Portal
+2. Shop Admin Portal for individual tenants.
+3. E-commerce site (for each tenant unique URL will be given)

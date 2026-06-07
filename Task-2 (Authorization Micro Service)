@@ -1,0 +1,3 @@
+1. Authorization micro service token generation code should be updated as the JWT Token should Contain User's Roles and Permissions
+2. Add @PreAuthorized for the CRUD opearions. For example, User Creation SHOP_USER_CREATE, SYS_USER_CREATE permissions will require.
+3. You can create a java project to extract the JWT token and Create the UserDetails. All the micro service will use it as a dependency 

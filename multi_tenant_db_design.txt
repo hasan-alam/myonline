@@ -1,0 +1,37 @@
+Database Details
+=================
+
+Database: MySQL
+Host: localhost (127.0.0.1)
+Port: MySQL Default port 3306
+User: root
+Password: root
+Schema: myonline
+
+
+Multi Tenant DB Design
+===================
+
+Permission
+----------------
+permission_title
+permission_description
+prmission_status (0=Inactive, 1=Active)
+permission_for (Shop Admin Portal=SHPADMP, System Admin Portal=SYSADMP, Both=BOTH) 
+
+Role
+--------
+role_id
+role_description
+role_satus (0=Inactive, 1=Active)
+role_for (Shop Admin Portal=SHPADMP, System Admin Portal=SYSADMP, Both=BOTH) 
+shop_id
+
+User
+-------
+name
+mobile
+email
+password
+user_for (Shop Admin Portal=SHPADMP, System Admin Portal=SYSADMP, Both=BOTH) 
+shop_id

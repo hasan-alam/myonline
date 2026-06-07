@@ -1,0 +1,85 @@
+# =============================================
+# Docker Compose for auth_service
+# myonline Authorization Microservice
+# =============================================
+# Services:
+#   - mysql    : MySQL 8.0 database
+#   - auth_service : Spring Boot Authorization Microservice
+# =============================================
+
+version: '3.8'
+
+services:
+
+  # -----------------------------------------------
+  # MySQL Database
+  # -----------------------------------------------
+  mysql:
+    image: mysql:8.0
+    container_name: myonline-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: myonline
+      MYSQL_ROOT_HOST: '%'       # Allow connections from any host (for service-to-service within Docker network)
+    ports:
+      - "3306:3306"              # Expose to host for local DB tools (e.g., MySQL Workbench)
+    volumes:
+      - mysql_data:/var/lib/mysql  # Persist database data across container restarts
+    networks:
+      - myonline-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # -----------------------------------------------
+  # Authorization Microservice
+  # -----------------------------------------------
+  auth_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myonline-auth-service
+    restart: unless-stopped
+    ports:
+      - "8081:8081"             # Expose the auth service to the host
+    environment:
+      # Database connection (points to the mysql service in this Docker network)
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/myonline?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+
+      # JWT Configuration
+      APP_JWT_SECRET: myonline-auth-service-super-secret-key-minimum-256-bits-long-for-hs256
+      APP_JWT_EXPIRATION_MS: 900000       # 15 minutes
+      APP_JWT_REFRESH_EXPIRATION_MS: 604800000  # 7 days
+
+      # JPA Configuration
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "false"        # Disable SQL logging in production
+
+      # Logging
+      LOGGING_LEVEL_COM_MYONLINE: INFO
+    depends_on:
+      mysql:
+        condition: service_healthy  # Wait for MySQL to be healthy before starting
+    networks:
+      - myonline-network
+
+# -----------------------------------------------
+# Named Volumes
+# -----------------------------------------------
+volumes:
+  mysql_data:
+    driver: local
+
+# -----------------------------------------------
+# Networks
+# -----------------------------------------------
+networks:
+  myonline-network:
+    driver: bridge
+    name: myonline-network
