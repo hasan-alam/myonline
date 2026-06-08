@@ -35,7 +35,7 @@ public class RefreshToken {
     private String token;
 
     /** The user this refresh token was issued to */
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
 

@@ -10,7 +10,7 @@
 ## Prerequisites
 
 - MySQL running on `localhost:3306` with schema `myonline` (auto-created on first run)
-- Java 21 installed
+- Java 17 installed
 - Maven installed (or use `./mvnw`)
 
 ---

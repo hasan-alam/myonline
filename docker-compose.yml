@@ -1,0 +1,55 @@
+# =============================================
+# Docker Compose for myonline Platform
+# =============================================
+# Services:
+#   - auth_service : Spring Boot Authorization Microservice
+# =============================================
+# Note: Uses the host machine's MySQL instance.
+#       Ensure MySQL is running on the host and
+#       accessible with the credentials below.
+# =============================================
+
+version: '3.8'
+
+services:
+
+  # -----------------------------------------------
+  # Authorization Microservice
+  # -----------------------------------------------
+  auth_service:
+    build:
+      context: ./auth_service
+      dockerfile: Dockerfile
+    container_name: myonline-auth-service
+    restart: unless-stopped
+    ports:
+      - "8081:8081"             # Expose the auth service to the host
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  # Resolves to the host machine IP (Linux)
+    environment:
+      # Database connection (points to the host machine's MySQL)
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/myonline?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+
+      # JWT Configuration
+      APP_JWT_SECRET: myonline-auth-service-super-secret-key-minimum-256-bits-long-for-hs256
+      APP_JWT_EXPIRATION_MS: 900000       # 15 minutes
+      APP_JWT_REFRESH_EXPIRATION_MS: 604800000  # 7 days
+
+      # JPA Configuration
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "false"        # Disable SQL logging in production
+
+      # Logging
+      LOGGING_LEVEL_COM_MYONLINE: INFO
+    networks:
+      - myonline-network
+
+# -----------------------------------------------
+# Networks
+# -----------------------------------------------
+networks:
+  myonline-network:
+    driver: bridge
+    name: myonline-network

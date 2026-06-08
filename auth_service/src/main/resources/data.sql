@@ -123,7 +123,7 @@ VALUES (
     'System Super Admin',
     '+8801700000000',
     'superadmin@myonline.com',
-    '$2a$12$ov/GITPaORQYluH4MtiGqeILlnVoA3hFgBtjkJekm2OWkEYr2.7eK',
+    '$2a$12$Z7L5iuo/V5tuDC3Lb0iLzu7lcYzv72vL6gyF9lFrwbOTHgRou2A72',
     'SYSADMP',
     1,
     NULL,
