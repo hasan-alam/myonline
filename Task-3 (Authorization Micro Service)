@@ -1,0 +1,18 @@
+Changes needed in: data.sql
+
+PERMISSIONS (System Admin Portal):
+1. System Product Management
+    a. SYS_CATEGORY_MANAGE: break down it to VIEW, EDIT, CREATE, DELETE, ACTIVATE
+    b. SYS_ITEM_MANAGE: break down it into PRODUCT (RENAME ITEM as PRODUCT) VIEW, EDIT, CREATE, DELETE, ACTIVATE
+    c. TENANT_PAYMENT_REPORT: Break down it into TENANT_PAYMENT_VIEW, TENANT_PAYMENT_APPROVAL
+2. Role & Permission Management (System Admin)
+    a. SYS_ROLE_MANAGE: Break down to VIEW, EDIT, DELETE, CREATE, ACTIVATE (@PreAuthorize in PermissionController accordingly)
+    b. SYS_PERMISSION_MANAGE: Break down to PERMISSION_VIEW and SYS_PERMISSION_MANAGE
+    c. Add PERMISSION_VIEW to permission_for =BOTH and also correct the @PreAuthorize in PermissionController accordingly
+
+PERMISSIONS (Shop Admin Portal):
+1. Product & Inventory
+   a. INVENTORY_MANAGE: Break it down to Add, Edit, Delete, View
+   b. CATEGORY_MANAGE: Break it down to Add, Edit, Delete, View
+   c. SHIPPER_MANAGE: Break it down to Add, Edit, Delete, View
+   d. SHOP_ROLE_MANAGE: Break it down to Add, Edit, Delete, View (@PreAuthorize in PermissionController accordingly)
