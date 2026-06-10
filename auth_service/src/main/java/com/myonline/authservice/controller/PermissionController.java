@@ -48,7 +48,7 @@ public class PermissionController {
     private final PermissionService permissionService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('SYS_PERMISSION_MANAGE')")
+    @PreAuthorize("hasAuthority('PERMISSION_VIEW') or hasAuthority('SYS_PERMISSION_MANAGE')")
     @Operation(summary = "Get all permissions", description = "Returns all permissions in the system")
     public ResponseEntity<ApiResponse<List<PermissionResponse>>> getAllPermissions() {
         List<PermissionResponse> permissions = permissionService.getAllPermissions();
@@ -56,7 +56,7 @@ public class PermissionController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('SYS_PERMISSION_MANAGE')")
+    @PreAuthorize("hasAuthority('PERMISSION_VIEW') or hasAuthority('SYS_PERMISSION_MANAGE')")
     @Operation(summary = "Get permission by ID")
     public ResponseEntity<ApiResponse<PermissionResponse>> getPermissionById(
             @Parameter(description = "Permission ID") @PathVariable Long id) {
@@ -65,7 +65,7 @@ public class PermissionController {
     }
 
     @GetMapping("/portal/{portalType}")
-    @PreAuthorize("hasAuthority('SYS_PERMISSION_MANAGE')")
+    @PreAuthorize("hasAuthority('PERMISSION_VIEW') or hasAuthority('SYS_PERMISSION_MANAGE')")
     @Operation(summary = "Get permissions by portal type",
             description = "Filter permissions by portal: SHPADMP, SYSADMP, or BOTH")
     public ResponseEntity<ApiResponse<List<PermissionResponse>>> getPermissionsByPortal(

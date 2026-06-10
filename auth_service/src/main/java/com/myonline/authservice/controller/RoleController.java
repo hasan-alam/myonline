@@ -50,7 +50,7 @@ public class RoleController {
     private final RoleService roleService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('SYS_ROLE_MANAGE') or hasAuthority('SHOP_ROLE_MANAGE')")
+    @PreAuthorize("hasAuthority('SYS_ROLE_VIEW') or hasAuthority('SHOP_ROLE_VIEW')")
     @Operation(summary = "Get all roles", description = "Returns all roles in the system")
     public ResponseEntity<ApiResponse<List<RoleResponse>>> getAllRoles() {
         List<RoleResponse> roles = roleService.getAllRoles();
@@ -58,7 +58,7 @@ public class RoleController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('SYS_ROLE_MANAGE') or hasAuthority('SHOP_ROLE_MANAGE')")
+    @PreAuthorize("hasAuthority('SYS_ROLE_VIEW') or hasAuthority('SHOP_ROLE_VIEW')")
     @Operation(summary = "Get role by ID")
     public ResponseEntity<ApiResponse<RoleResponse>> getRoleById(
             @Parameter(description = "Role ID") @PathVariable Long id) {
@@ -67,7 +67,7 @@ public class RoleController {
     }
 
     @GetMapping("/shop/{shopId}")
-    @PreAuthorize("hasAuthority('SYS_ROLE_MANAGE') or hasAuthority('SHOP_ROLE_MANAGE')")
+    @PreAuthorize("hasAuthority('SYS_ROLE_VIEW') or hasAuthority('SHOP_ROLE_VIEW')")
     @Operation(summary = "Get roles by shop/tenant",
             description = "Returns all roles belonging to a specific shop/tenant")
     public ResponseEntity<ApiResponse<List<RoleResponse>>> getRolesByShop(
@@ -77,7 +77,7 @@ public class RoleController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('SYS_ROLE_MANAGE') or hasAuthority('SHOP_ROLE_MANAGE')")
+    @PreAuthorize("hasAuthority('SYS_ROLE_CREATE') or hasAuthority('SHOP_ROLE_ADD')")
     @Operation(summary = "Create a new role")
     public ResponseEntity<ApiResponse<RoleResponse>> createRole(
             @Valid @RequestBody CreateRoleRequest request) {
@@ -88,7 +88,7 @@ public class RoleController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('SYS_ROLE_MANAGE') or hasAuthority('SHOP_ROLE_MANAGE')")
+    @PreAuthorize("hasAuthority('SYS_ROLE_EDIT') or hasAuthority('SHOP_ROLE_EDIT')")
     @Operation(summary = "Update a role")
     public ResponseEntity<ApiResponse<RoleResponse>> updateRole(
             @Parameter(description = "Role ID") @PathVariable Long id,
@@ -98,7 +98,7 @@ public class RoleController {
     }
 
     @PutMapping("/{id}/activate")
-    @PreAuthorize("hasAuthority('SYS_ROLE_MANAGE') or hasAuthority('SHOP_ROLE_MANAGE')")
+    @PreAuthorize("hasAuthority('SYS_ROLE_ACTIVATE') or hasAuthority('SHOP_ROLE_EDIT')")
     @Operation(summary = "Activate a role", description = "Set role status to Active (1)")
     public ResponseEntity<ApiResponse<RoleResponse>> activateRole(
             @Parameter(description = "Role ID") @PathVariable Long id) {
@@ -107,7 +107,7 @@ public class RoleController {
     }
 
     @PutMapping("/{id}/deactivate")
-    @PreAuthorize("hasAuthority('SYS_ROLE_MANAGE') or hasAuthority('SHOP_ROLE_MANAGE')")
+    @PreAuthorize("hasAuthority('SYS_ROLE_ACTIVATE') or hasAuthority('SHOP_ROLE_EDIT')")
     @Operation(summary = "Deactivate a role", description = "Set role status to Inactive (0)")
     public ResponseEntity<ApiResponse<RoleResponse>> deactivateRole(
             @Parameter(description = "Role ID") @PathVariable Long id) {
@@ -116,7 +116,7 @@ public class RoleController {
     }
 
     @PostMapping("/{id}/permissions")
-    @PreAuthorize("hasAuthority('SYS_ROLE_MANAGE') or hasAuthority('SHOP_ROLE_MANAGE')")
+    @PreAuthorize("hasAuthority('SYS_ROLE_EDIT') or hasAuthority('SHOP_ROLE_EDIT')")
     @Operation(summary = "Assign permissions to a role",
             description = "Add permissions to a role. Already assigned permissions are ignored.")
     public ResponseEntity<ApiResponse<RoleResponse>> assignPermissions(
@@ -127,7 +127,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/{id}/permissions")
-    @PreAuthorize("hasAuthority('SYS_ROLE_MANAGE') or hasAuthority('SHOP_ROLE_MANAGE')")
+    @PreAuthorize("hasAuthority('SYS_ROLE_EDIT') or hasAuthority('SHOP_ROLE_EDIT')")
     @Operation(summary = "Remove permissions from a role",
             description = "Remove specific permissions from a role")
     public ResponseEntity<ApiResponse<RoleResponse>> removePermissions(
@@ -138,7 +138,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('SYS_ROLE_MANAGE') or hasAuthority('SHOP_ROLE_MANAGE')")
+    @PreAuthorize("hasAuthority('SYS_ROLE_DELETE') or hasAuthority('SHOP_ROLE_DELETE')")
     @Operation(summary = "Delete a role")
     public ResponseEntity<ApiResponse<Void>> deleteRole(
             @Parameter(description = "Role ID") @PathVariable Long id) {
