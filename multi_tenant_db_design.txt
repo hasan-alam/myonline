@@ -35,3 +35,48 @@ email
 password
 user_for (Shop Admin Portal=SHPADMP, System Admin Portal=SYSADMP, Both=BOTH) 
 shop_id
+
+tenant_fees
+-------------
+    - packageCode varchar(25)
+    - packageName varchar(100)
+    - productCountFrom int
+    - productCountTo int
+    - registrationFee int
+    - monthlyFee int
+   Note: All fields are required, packageCode is PK, productCountFrom and productCountTo are jointly unique
+   and the productCountFrom and productCountTo ranges are not conflicting (1 to 20, 21-30 correct. But 1 20 20 and 20 to 30 nor correct)
+
+tenant_registration_request
+---------------------------
+      - tenantBusinessName (required)
+      - domainPrefix (required and must be unique)(prefix.myonline.com, Ex: lubuta.myonline.com, kidsnmoms.myonline.com)
+      - mailingAddress1 (required)
+      - mailingAddress2
+      - contactPerson (required)
+      - contactNumber1 (required)
+      - contactNumber2
+      - emailAddress (required)
+      - maxInventoryItems (required, integer)
+      - packageCode
+      - registrationFee (required, integer) -> populated from tenant_fees table
+      - monthlyPayment (required, integer)  -> populated from tenant_fees table
+      - approvalStatus ('P' for Pending, 'A' for Approved, 'R' for Rejected) Initially its P
+      - registrationFeePmtChannel
+      - registrationFeePmtRef
+      - registrationFeePmtReceipt (BLOB)- screenshot
+
+  tenant_info
+  ---------------
+      - tenantID (long) PK
+      - tenantBusinessName (required)
+      - domainPrefix
+      - mailingAddress1 (required)
+      - mailingAddress2
+      - contactPerson (required)
+      - contactNumber1 (required)
+      - contactNumber2
+      - emailAddress (required)
+      - maxInventoryItems (required, integer)
+      - packageCode
+      - status (A = Active, I= Inactive)
