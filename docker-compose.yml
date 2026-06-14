@@ -2,7 +2,8 @@
 # Docker Compose for myonline Platform
 # =============================================
 # Services:
-#   - auth_service : Spring Boot Authorization Microservice
+#   - auth_service   : Spring Boot Authorization Microservice  (port 8081)
+#   - tenant_service : Spring Boot Tenant Microservice         (port 8082)
 # =============================================
 # Note: Uses the host machine's MySQL instance.
 #       Ensure MySQL is running on the host and
@@ -36,6 +37,37 @@ services:
       APP_JWT_SECRET: myonline-auth-service-super-secret-key-minimum-256-bits-long-for-hs256
       APP_JWT_EXPIRATION_MS: 900000       # 15 minutes
       APP_JWT_REFRESH_EXPIRATION_MS: 604800000  # 7 days
+
+      # JPA Configuration
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "false"        # Disable SQL logging in production
+
+      # Logging
+      LOGGING_LEVEL_COM_MYONLINE: INFO
+    networks:
+      - myonline-network
+
+  # -----------------------------------------------
+  # Tenant Microservice
+  # -----------------------------------------------
+  tenant_service:
+    build:
+      context: ./tenant_service
+      dockerfile: Dockerfile
+    container_name: myonline-tenant-service
+    restart: unless-stopped
+    ports:
+      - "8082:8082"             # Expose the tenant service to the host
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  # Resolves to the host machine IP (Linux)
+    environment:
+      # Database connection (points to the host machine's MySQL)
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/myonline?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+
+      # JWT Configuration — must match auth_service secret for token validation
+      APP_JWT_SECRET: myonline-auth-service-super-secret-key-minimum-256-bits-long-for-hs256
 
       # JPA Configuration
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
