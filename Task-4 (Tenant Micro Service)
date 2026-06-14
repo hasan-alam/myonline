@@ -1,0 +1,29 @@
+In this task another micro service tenant_service will be created.
+The micro service will
+    - Use auth-client-lib for JWT token exploring and setting security context holder using JwtAuthenticationFilter
+    - The End points will be PreAuthorized by permission
+    - Keep similarities with the auth_service architecture
+    - Generate the Dockerfile as generated in auth_service
+    - Add this micro service in docker-compose too
+    - Use available port number
+    - Use exception handling similarly they are handled in auth_service
+    - Use the Swagger and also write comments properly
+
+ Rest End Point:
+ ===============
+ 1. Tenant Fees Controller
+ =============================
+      Endpoints:
+       - CRUD end points with TENANT_PAYMENT_APPROVAL(Management) and TENANT_PAYMENT_VIEW (Search, list and view) permission accordingly
+       - search and list productCount in range of productCountFrom, productCountTo
+       - search and list by packageCode
+
+ 2. Tenant Registration Controller
+ =================================
+      Endpoints:
+      - Tenant's registration request endpoint will be allowed publicly
+      - List all Tenant Registration Requests (TENANT_PAYMENT_VIEW or TENANT_PAYMENT_APPROVAL Permission will require)
+      - List all Tenant Registration Requests filtered by ID, packageCode, tenantBusinessName partial search, approvalStatus, domainPrefix, contactNumber (search in both contactNumber1 and contactNumber2), emailAddress(TENANT_PAYMENT_VIEW or TENANT_PAYMENT_APPROVAL Permission will require)
+      - View a Tenant Registration Requests by ID (TENANT_PAYMENT_VIEW or TENANT_PAYMENT_APPROVAL Permission will require)
+      - Endpoint to check whether the domainPrefix is allocated or used already or not (No permission needed)
+      - Tenant's registration request Approval/Reject with TENANT_PAYMENT_APPROVAL permission, After Approval tenant will be created and inserted in tenant_info with Active status
