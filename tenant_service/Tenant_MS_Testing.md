@@ -5,6 +5,12 @@
 **Swagger UI:** `http://localhost:8082/swagger-ui.html`  
 **OpenAPI JSON:** `http://localhost:8082/api-docs`
 
+**Public Tenant Registration Page:** `http://localhost:3000/register`
+
+> This page allows prospective tenants to submit a registration request without logging in.
+> It supports English and Bangla, auto-selects a subscription package based on product count,
+> checks domain availability in real-time, and allows uploading a payment receipt.
+
 > **Note:** The tenant service does **not** issue JWT tokens. It validates tokens issued by `auth_service` (port 8081). You must log in via `auth_service` first and use the returned `accessToken` for all protected endpoints.
 
 ---

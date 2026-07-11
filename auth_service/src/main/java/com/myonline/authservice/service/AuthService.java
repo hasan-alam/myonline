@@ -25,8 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -241,17 +243,17 @@ public class AuthService {
      * @return map of custom JWT claims
      */
     private Map<String, Object> buildJwtClaims(User user) {
-        List<String> roles = new ArrayList<>();
-        List<String> permissions = new ArrayList<>();
+        Set<String> roleSet = new LinkedHashSet<>();
+        Set<String> permissionSet = new LinkedHashSet<>();
 
         if (user.getRoles() != null) {
             for (Role role : user.getRoles()) {
                 if (role.getRoleStatus() != 1) continue;
-                roles.add(role.getRoleName());
+                roleSet.add(role.getRoleName());
                 if (role.getPermissions() != null) {
                     for (Permission permission : role.getPermissions()) {
                         if (permission.getPermissionStatus() == 1) {
-                            permissions.add(permission.getPermissionTitle());
+                            permissionSet.add(permission.getPermissionTitle());
                         }
                     }
                 }
@@ -262,8 +264,8 @@ public class AuthService {
         claims.put("userId",      user.getUserId());
         claims.put("shopId",      user.getShopId());
         claims.put("portalType",  user.getUserFor() != null ? user.getUserFor().name() : null);
-        claims.put("roles",       roles);
-        claims.put("permissions", permissions);
+        claims.put("roles",       new ArrayList<>(roleSet));
+        claims.put("permissions", new ArrayList<>(permissionSet));
         return claims;
     }
 

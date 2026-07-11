@@ -79,6 +79,30 @@ public class UserService {
     // =============================================
 
     /**
+     * Count users with the given email address.
+     * Since email is unique, the result is always 0 (not found) or 1 (exists).
+     *
+     * @param email the email address to check
+     * @return 0 if no user has this email, 1 if a user exists
+     */
+    @Transactional(readOnly = true)
+    public int countByEmail(String email) {
+        return userRepository.countByEmail(email);
+    }
+
+    /**
+     * Count users with the given mobile number.
+     * Since mobile is unique, the result is always 0 (not found) or 1 (exists).
+     *
+     * @param mobile the mobile number to check
+     * @return 0 if no user has this mobile, 1 if a user exists
+     */
+    @Transactional(readOnly = true)
+    public int countByMobile(String mobile) {
+        return userRepository.countByMobile(mobile);
+    }
+
+    /**
      * Retrieve all users.
      *
      * @return list of all users

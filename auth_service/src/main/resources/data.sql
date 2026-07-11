@@ -173,23 +173,31 @@ VALUES ('SHOP_ADMIN', 'Shop administrator with full shop management access', 1, 
 -- 4. ASSIGN ALL PERMISSIONS TO SUPER_ADMIN
 -- =============================================
 
--- Assign all SYSADMP and BOTH permissions to SUPER_ADMIN role
-INSERT IGNORE INTO role_permission (role_id, permission_id)
+-- Assign all SYSADMP and BOTH permissions to SUPER_ADMIN role (skip if already assigned)
+INSERT INTO role_permission (role_id, permission_id)
 SELECT r.role_id, p.permission_id
 FROM role r, permission p
 WHERE r.role_name = 'SUPER_ADMIN'
-  AND p.permission_for IN ('SYSADMP', 'BOTH');
+  AND p.permission_for IN ('SYSADMP', 'BOTH')
+  AND NOT EXISTS (
+      SELECT 1 FROM role_permission rp
+      WHERE rp.role_id = r.role_id AND rp.permission_id = p.permission_id
+  );
 
 -- =============================================
 -- 5. ASSIGN SHOP PERMISSIONS TO SHOP_ADMIN
 -- =============================================
 
--- Assign all SHPADMP and BOTH permissions to SHOP_ADMIN role
-INSERT IGNORE INTO role_permission (role_id, permission_id)
+-- Assign all SHPADMP and BOTH permissions to SHOP_ADMIN role (skip if already assigned)
+INSERT INTO role_permission (role_id, permission_id)
 SELECT r.role_id, p.permission_id
 FROM role r, permission p
 WHERE r.role_name = 'SHOP_ADMIN'
-  AND p.permission_for IN ('SHPADMP', 'BOTH');
+  AND p.permission_for IN ('SHPADMP', 'BOTH')
+  AND NOT EXISTS (
+      SELECT 1 FROM role_permission rp
+      WHERE rp.role_id = r.role_id AND rp.permission_id = p.permission_id
+  );
 
 -- =============================================
 -- 6. DEFAULT SUPER ADMIN USER
@@ -215,8 +223,12 @@ VALUES (
 -- 7. ASSIGN SUPER_ADMIN ROLE TO DEFAULT USER
 -- =============================================
 
-INSERT IGNORE INTO user_role (user_id, role_id)
+INSERT INTO user_role (user_id, role_id)
 SELECT u.user_id, r.role_id
 FROM user u, role r
 WHERE u.email = 'superadmin@myonline.com'
-  AND r.role_name = 'SUPER_ADMIN';
+  AND r.role_name = 'SUPER_ADMIN'
+  AND NOT EXISTS (
+      SELECT 1 FROM user_role ur
+      WHERE ur.user_id = u.user_id AND ur.role_id = r.role_id
+  );

@@ -217,19 +217,21 @@ public class TenantRegistrationController {
     @Operation(
         summary = "Approve or reject a registration request",
         description = "Approves or rejects a Pending (P) tenant registration request. " +
-                      "Set 'approved: true' to approve — this creates a tenant account in tenant_info with Active status. " +
-                      "Set 'approved: false' to reject — no tenant account is created. " +
+                      "On approval: creates tenant_info, creates a SHOP_ADMIN user in auth_service (if new email), " +
+                      "assigns SHOP_ADMIN role, and saves a PENDING notification. " +
+                      "On rejection: saves a PENDING notification with the rejection reason. " +
                       "Only Pending (P) requests can be processed. " +
-                      "Optional remarks can be provided. " +
                       "Requires TENANT_PAYMENT_APPROVAL permission."
     )
     public ResponseEntity<ApiResponse<Map<String, Object>>> approveOrRejectRegistration(
             @Parameter(description = "Registration request ID", example = "1")
             @PathVariable Long id,
-            @Valid @RequestBody TenantApprovalRequest request) {
+            @Valid @RequestBody TenantApprovalRequest request,
+            @org.springframework.web.bind.annotation.RequestHeader(
+                value = "Authorization", required = false) String authHeader) {
 
         log.info("PUT /api/tenant-registrations/{}/decision - approved={}", id, request.getApproved());
-        Map<String, Object> result = registrationService.approveOrRejectRegistration(id, request);
+        Map<String, Object> result = registrationService.approveOrRejectRegistration(id, request, authHeader);
 
         boolean approved = Boolean.TRUE.equals(request.getApproved());
         String message = approved

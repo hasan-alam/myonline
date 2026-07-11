@@ -75,11 +75,10 @@ public class TenantFeesController {
      * Requires TENANT_PAYMENT_VIEW or TENANT_PAYMENT_APPROVAL permission.
      */
     @GetMapping
-    @PreAuthorize("hasAuthority('TENANT_PAYMENT_VIEW') or hasAuthority('TENANT_PAYMENT_APPROVAL')")
     @Operation(
-        summary = "List all subscription packages",
+        summary = "List all subscription packages (Public)",
         description = "Returns all tenant subscription packages ordered by product count range. " +
-                      "Requires TENANT_PAYMENT_VIEW or TENANT_PAYMENT_APPROVAL permission."
+                      "No authentication required — used by the public registration page."
     )
     public ResponseEntity<ApiResponse<List<TenantFeesResponse>>> getAllTenantFees() {
         log.info("GET /api/tenant-fees - Fetching all packages");

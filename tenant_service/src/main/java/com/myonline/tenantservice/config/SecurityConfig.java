@@ -49,6 +49,8 @@ public class SecurityConfig {
     private static final String[] PUBLIC_ENDPOINTS = {
         "/api/tenant-registrations",           // POST (submit registration)
         "/api/tenant-registrations/check-domain", // GET (domain availability check)
+        "/api/tenant-fees",                    // GET (public pricing info for registration page)
+        "/api/tenant-fees/**",                 // GET (public pricing info by code)
         "/api-docs/**",
         "/swagger-ui/**",
         "/swagger-ui.html",

@@ -2,8 +2,9 @@
 # Docker Compose for myonline Platform
 # =============================================
 # Services:
-#   - auth_service   : Spring Boot Authorization Microservice  (port 8081)
-#   - tenant_service : Spring Boot Tenant Microservice         (port 8082)
+#   - auth_service      : Spring Boot Authorization Microservice  (port 8081)
+#   - tenant_service    : Spring Boot Tenant Microservice         (port 8082)
+#   - sys_admin_portal  : React JS System Admin Portal            (port 3000)
 # =============================================
 # Note: Uses the host machine's MySQL instance.
 #       Ensure MySQL is running on the host and
@@ -69,12 +70,32 @@ services:
       # JWT Configuration — must match auth_service secret for token validation
       APP_JWT_SECRET: myonline-auth-service-super-secret-key-minimum-256-bits-long-for-hs256
 
+      # Auth Service URL — used for SHOP_ADMIN user creation on tenant approval
+      APP_AUTH_SERVICE_URL: http://host.docker.internal:8081
+
       # JPA Configuration
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_SHOW_SQL: "false"        # Disable SQL logging in production
 
       # Logging
       LOGGING_LEVEL_COM_MYONLINE: INFO
+    networks:
+      - myonline-network
+
+  # -----------------------------------------------
+  # System Admin Portal (React JS)
+  # -----------------------------------------------
+  sys_admin_portal:
+    build:
+      context: ./sys_admin_portal
+      dockerfile: Dockerfile
+    container_name: myonline-sys-admin-portal
+    restart: unless-stopped
+    ports:
+      - "3000:80"               # React app served by nginx on port 80, exposed as 3000
+    depends_on:
+      - auth_service
+      - tenant_service
     networks:
       - myonline-network
 

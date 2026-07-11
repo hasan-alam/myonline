@@ -18,6 +18,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 /**
  * Spring Security configuration for the Authorization Microservice.
@@ -47,6 +52,7 @@ public class SecurityConfig {
     private static final String[] PUBLIC_ENDPOINTS = {
             "/api/auth/login",
             "/api/auth/refresh-token",
+            "/api/users/count",   // Public uniqueness check for tenant registration
             "/api-docs/**",
             "/swagger-ui/**",
             "/swagger-ui.html",
@@ -70,6 +76,9 @@ public class SecurityConfig {
                 // Disable CSRF — REST APIs use JWT tokens, not session cookies
                 .csrf(AbstractHttpConfigurer::disable)
 
+                // Enable CORS with the configured policy
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
                 // Configure request authorization
                 .authorizeHttpRequests(auth -> auth
                         // Allow public endpoints without authentication
@@ -90,6 +99,24 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    /**
+     * CORS configuration — allows the frontend origins to call this service directly.
+     * In Docker Compose the nginx proxy forwards requests same-origin, but this
+     * is also needed for local development where the dev server runs on a different port.
+     */
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOriginPatterns(List.of("http://localhost:*"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
     /**

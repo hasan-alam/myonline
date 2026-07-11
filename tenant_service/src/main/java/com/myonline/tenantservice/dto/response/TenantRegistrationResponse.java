@@ -73,6 +73,13 @@ public class TenantRegistrationResponse {
     @Schema(description = "Admin remarks on approval/rejection")
     private String adminRemarks;
 
+    /**
+     * Base64-encoded payment receipt image.
+     * Only populated when fetching a single registration by ID (not included in list responses).
+     */
+    @Schema(description = "Base64-encoded payment receipt image (only returned in single-record fetch)")
+    private String registrationFeePmtReceiptBase64;
+
     @Schema(description = "Submission timestamp")
     private LocalDateTime createdAt;
 

@@ -1,0 +1,8 @@
+1. Create React JS application for the System Admin Portal (sys_admin_portal) with the following features:
+- User Authentication: use auth service and use the token and refresh token for secure access.
+- CRUD Operations: Implement Create, Read, Update, and Delete operations for managing users, roles, and permissions.
+- Tenant Management: as per the tenant_service, implement tenant and fees management features.
+- Containerize the application using Docker and add it to the docker-compose file for easy deployment.
+- The UI should be responsive and user-friendly, with a clean and modern design.
+- Use relevant images and icons to enhance the user experience.
+

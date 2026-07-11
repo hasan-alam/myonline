@@ -1,0 +1,14 @@
+As a tenant I want to register my company and submit request for registration
+
+I need a public URL (system admin portal) where I can fill up my registration form.
+I will be asked how many products I will sell, Based on my selection the package and costing will be shown.
+I will be able to upload my payment slip.
+
+I will be asked for the domain prefix to provide with clear message describing in details.
+
+I will be able to switch language English and Bangla.
+
+After providing the domain name it will automatically search and check for avilability
+
+The Landing Page should be good looking and use the system admin portal design and theme.
+Provide the link in the Tenant_MS_Testing.md file

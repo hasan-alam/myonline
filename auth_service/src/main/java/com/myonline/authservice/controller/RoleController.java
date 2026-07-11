@@ -50,8 +50,9 @@ public class RoleController {
     private final RoleService roleService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('SYS_ROLE_VIEW') or hasAuthority('SHOP_ROLE_VIEW')")
-    @Operation(summary = "Get all roles", description = "Returns all roles in the system")
+    @PreAuthorize("hasAuthority('SYS_ROLE_VIEW') or hasAuthority('SHOP_ROLE_VIEW') or hasAuthority('TENANT_PAYMENT_APPROVAL')")
+    @Operation(summary = "Get all roles", description = "Returns all roles in the system. " +
+            "Also callable by TENANT_PAYMENT_APPROVAL to look up the SHOP_ADMIN role ID during tenant approval.")
     public ResponseEntity<ApiResponse<List<RoleResponse>>> getAllRoles() {
         List<RoleResponse> roles = roleService.getAllRoles();
         return ResponseEntity.ok(ApiResponse.success("Roles retrieved successfully", roles));

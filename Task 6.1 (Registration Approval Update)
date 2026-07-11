@@ -1,0 +1,37 @@
+As a user who has 'TENANT_PAYMENT_APPROVAL', I want to Approve/Reject Tenant Registration Request.
+
+- Already this code is available. But I need following changes
+1. The Approver should be able to view the Money receipt uploaded the requestor
+2. if Approved: a default password will be generated and a new user will be inserted in the user table with password encryption that is used(if no user using the provided email address is found), the role will be SHOP_ADMIN, the user for  will be SHPADMP
+3. After approval/Rejection A message will be saved in notification table (A Notification Service will be developed later to send the notification, not now)
+4. The Notification message will be auto generated like below
+    Dear {Name of the requestor},
+    Your tenant account registration is approved/rejected.
+    If rejected Reason of rejection: {The reason entered by the approver}
+    If approved: Your default password is : {default password}. (if new user is created, if the user is already available then "You can login with your existing password by selecting the Business")
+    Thank you
+    Notification Entity:
+        - notification id
+        - emailAddress
+        - mobileNumber
+        - reasonForRejection
+        - message
+        - status (PENDING, FAILED, SENT)
+
+User creation must be done with auth_service. No hard coded URL. 
+
+
+###Correction: 
+One sigle user will be tagged with one shop.
+The shop id will be the tenant id.
+For every approval of registration requet, one user will be created using the requestor's email address.
+shop_id will be the tenant_id
+user_for will be the SHPADMP
+Role will be SHOP_ADMIN 
+
+During the registration can you check whether any user using the given email address is there or not. 
+If user is found already using the email address, then it will show error to use another email address. 
+Same for mobile number. 
+Need to create a public endpoint in UserController to get count of user using the provided email address. 
+If count is 1 then user already exists
+

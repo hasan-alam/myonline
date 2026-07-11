@@ -24,6 +24,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     /** Check if a user with the given mobile number already exists */
     boolean existsByMobile(String mobile);
 
+    /** Count users with the given email address (0 or 1 since email is unique) */
+    int countByEmail(String email);
+
+    /** Count users with the given mobile number (0 or 1 since mobile is unique) */
+    int countByMobile(String mobile);
+
     /** Find all users belonging to a specific shop/tenant */
     List<User> findByShopId(Long shopId);
 

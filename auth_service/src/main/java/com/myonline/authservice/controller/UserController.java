@@ -18,6 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * REST controller for User management.
@@ -29,6 +30,7 @@ import java.util.List;
  *   <li>GET    /api/users                    — List all users</li>
  *   <li>GET    /api/users/{id}               — Get user by ID</li>
  *   <li>GET    /api/users/shop/{shopId}       — Get users by shop/tenant</li>
+ *   <li>GET    /api/users/count              — Count users by email or mobile (PUBLIC)</li>
  *   <li>POST   /api/users                    — Create a user</li>
  *   <li>PUT    /api/users/{id}/activate      — Activate a user</li>
  *   <li>PUT    /api/users/{id}/deactivate    — Deactivate a user</li>
@@ -46,6 +48,32 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+
+    /**
+     * Public endpoint — no authentication required.
+     * Returns the count of users matching the given email or mobile number.
+     * Since both fields are unique, the count is always 0 (not found) or 1 (exists).
+     * Used by the tenant registration form to validate uniqueness before submission.
+     *
+     * <p>Provide exactly one of {@code email} or {@code mobile} as a query parameter.
+     */
+    @GetMapping("/count")
+    @Operation(
+            summary = "Count users by email or mobile (public)",
+            description = "Returns {\"count\": 0} or {\"count\": 1}. No authentication required. " +
+                    "Used during tenant registration to check email/mobile uniqueness.")
+    public ResponseEntity<ApiResponse<Map<String, Integer>>> countUsers(
+            @Parameter(description = "Email address to check") @RequestParam(required = false) String email,
+            @Parameter(description = "Mobile number to check") @RequestParam(required = false) String mobile) {
+
+        int count = 0;
+        if (email != null && !email.isBlank()) {
+            count = userService.countByEmail(email.trim());
+        } else if (mobile != null && !mobile.isBlank()) {
+            count = userService.countByMobile(mobile.trim());
+        }
+        return ResponseEntity.ok(ApiResponse.success("Count retrieved successfully", Map.of("count", count)));
+    }
 
     @GetMapping
     @PreAuthorize("hasAuthority('SYS_USER_VIEW') or hasAuthority('SHOP_USER_VIEW')")
@@ -75,9 +103,10 @@ public class UserController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('SYS_USER_CREATE') or hasAuthority('SHOP_USER_CREATE')")
+    @PreAuthorize("hasAuthority('SYS_USER_CREATE') or hasAuthority('SHOP_USER_CREATE') or hasAuthority('TENANT_PAYMENT_APPROVAL')")
     @Operation(summary = "Create a new user",
-            description = "Create a user account. Password is BCrypt hashed before storage.")
+            description = "Create a user account. Password is BCrypt hashed before storage. " +
+                    "Also callable by TENANT_PAYMENT_APPROVAL to create the SHOP_ADMIN user on tenant approval.")
     public ResponseEntity<ApiResponse<UserResponse>> createUser(
             @Valid @RequestBody CreateUserRequest request) {
         UserResponse created = userService.createUser(request);
@@ -106,9 +135,10 @@ public class UserController {
     }
 
     @PostMapping("/{id}/roles")
-    @PreAuthorize("hasAuthority('SYS_USER_MANAGE') or hasAuthority('SHOP_USER_MANAGE')")
+    @PreAuthorize("hasAuthority('SYS_USER_MANAGE') or hasAuthority('SHOP_USER_MANAGE') or hasAuthority('TENANT_PAYMENT_APPROVAL')")
     @Operation(summary = "Assign roles to a user",
-            description = "Assign one or more roles to a user. Already assigned roles are ignored.")
+            description = "Assign one or more roles to a user. Already assigned roles are ignored. " +
+                    "Also callable by TENANT_PAYMENT_APPROVAL to assign SHOP_ADMIN role during tenant approval.")
     public ResponseEntity<ApiResponse<UserResponse>> assignRoles(
             @Parameter(description = "User ID") @PathVariable Long id,
             @Valid @RequestBody AssignRolesRequest request) {
